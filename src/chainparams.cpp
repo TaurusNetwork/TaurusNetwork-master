@@ -11,6 +11,7 @@
 #include "random.h"
 #include "util.h"
 #include "utilstrencodings.h"
+#include "bignum.h"
 
 #include <assert.h>
 
@@ -62,7 +63,7 @@ static const Checkpoints::CCheckpointData data = {
     1527479817, // * UNIX timestamp of last checkpoint block
     0,    // * total number of transactions between genesis and last checkpoint
                 //   (the tx=... number in the SetBestChain debug.log lines)
-    1200        // * estimated number of transactions per day after checkpoint
+    1440        // * estimated number of transactions per day after checkpoint
 };
 
 static Checkpoints::MapCheckpoints mapCheckpointsTestnet =
@@ -108,10 +109,10 @@ public:
         nMinerThreads = 0;
         nTargetTimespan = 1 * 60;
         nTargetSpacing = 1 * 60;
-        nLastPOWBlock = 400;
-        nMaturity = 201;
+        nLastPOWBlock = 20160;
+        nMaturity = 50;
         nMasternodeCountDrift = 20;
-	nMasternodeColleteralLimxDev = 5000; //Params().MasternodeColleteralLimxDev()
+	    nMasternodeColleteralLimxDev = 5000; //Params().MasternodeColleteralLimxDev()
         nModifierUpdateBlock = 1; // we use the version 2 for dmd
         nMaxMoneyOut = 235813213 * COIN;
 
@@ -128,17 +129,35 @@ public:
         genesis.nVersion = 1;
         genesis.nTime = 1529467399;
         genesis.nBits = 0x1e0ffff0;
-        genesis.nNonce = 0;
+        genesis.nNonce = 28963683;
+
+        uint256 hashTarget = CBigNum().SetCompact(genesis.nBits).getuint256();
+        /*while (genesis.GetHash() > hashTarget)
+        {
+            ++genesis.nNonce;
+            if (genesis.nNonce == 0)
+            {
+                printf("NONCE WRAPPED, incrementing time");
+                ++genesis.nTime;
+            }
+            if (genesis.nNonce % 10000 == 0)
+            {
+                printf("nonce %08u: hash = %s \n", genesis.nNonce, genesis.GetHash().ToString().c_str());
+            }
+        }*/
 
         hashGenesisBlock = genesis.GetHash();
-	//printf("%s\n", hashGenesisBlock.ToString().c_str());
-	//printf("%s\n", genesis.hashMerkleRoot.ToString().c_str());
-        assert(hashGenesisBlock == uint256("0x"));
-        assert(genesis.hashMerkleRoot == uint256("0x"));
+        //printf("MN nNonce %u\n", genesis.nNonce);
+        //printf("MN %s\n", hashGenesisBlock.ToString().c_str());
+	    //printf("MN %s\n", genesis.hashMerkleRoot.ToString().c_str());
+        assert(hashGenesisBlock == uint256("0x00000e289f6dc66be372d5cee8d9e22161fdebb91ab51a2941a1b80948801f09"));
+        assert(genesis.hashMerkleRoot == uint256("0x1e02a85ec91f5870311904afcaec93e570ed88a19dc60ef8047dccae52bdb850"));
 
-
-        vSeeds.push_back(CDNSSeedData("seed1.taurusnetwork.info", "seed1.taurusnetwork.info"));
-        vSeeds.push_back(CDNSSeedData("seed2.taurusnetwork.info", "seed2.taurusnetwork.info"));
+        vSeeds.push_back(CDNSSeedData("taurusnetwork-seed-1.dynu.net", "taurusnetwork-seed-1.dynu.net"));
+        vSeeds.push_back(CDNSSeedData("taurusnetwork-seed-2.dynu.net", "taurusnetwork-seed-2.dynu.net"));
+        vSeeds.push_back(CDNSSeedData("taurusnetwork-seed-3.dynu.net", "taurusnetwork-seed-3.dynu.net"));
+        vSeeds.push_back(CDNSSeedData("taurusnetwork-seed-4.dynu.net", "taurusnetwork-seed-4.dynu.net"));
+        vSeeds.push_back(CDNSSeedData("taurusnetwork-seed-5.dynu.net", "taurusnetwork-seed-5.dynu.net"));
         //vFixedSeeds.clear();
         //vSeeds.clear();
 
@@ -161,7 +180,6 @@ public:
         fSkipProofOfWorkCheck = false;
         fTestnetToBeDeprecatedFieldRPC = false;
         fHeadersFirstSyncingActive = false;
-
 
         nPoolMaxTransactions = 3;
         strSporkKey = "0478c3e932fbe183b2f665de937866cb1cfc5ed4b0bf733b72286f265ffc03ff52dfd669fbb3f77d630e5393da65c721a9a891d2c4c6aa515dfd25ffe545582357";
@@ -205,11 +223,28 @@ public:
 
         //! Modify the testnet genesis block so the timestamp is valid for a later start.
         genesis.nTime = 1527479818;
-        genesis.nNonce = 20807677;
+        genesis.nNonce = 31396492;
 
+        uint256 hashTarget = CBigNum().SetCompact(genesis.nBits).getuint256();
+        /*while (genesis.GetHash() > hashTarget)
+        {
+            ++genesis.nNonce;
+            if (genesis.nNonce == 0)
+            {
+                printf("NONCE WRAPPED, incrementing time");
+                ++genesis.nTime;
+            }
+            if (genesis.nNonce % 10000 == 0)
+            {
+                printf("nonce %08u: hash = %s \n", genesis.nNonce, genesis.GetHash().ToString().c_str());
+            }
+        }*/
 
         hashGenesisBlock = genesis.GetHash();
-        assert(hashGenesisBlock == uint256("0x000007937e75a1ee5aa5a575e44846c90bbf8da5e5843f3345f959b8bd5adb0c"));
+        //printf("TN nNonce %u\n", genesis.nNonce);
+        //printf("TN %s\n", hashGenesisBlock.ToString().c_str());
+        //printf("TN %s\n", genesis.hashMerkleRoot.ToString().c_str());
+        assert(hashGenesisBlock == uint256("0x0000006d6b5533d8a559f7e757ef64790fbfa65d7beaaa599ed4458892697c3f"));
 
         vFixedSeeds.clear();
         vSeeds.clear();
@@ -226,7 +261,6 @@ public:
 
         convertSeed6(vFixedSeeds, pnSeed6_test, ARRAYLEN(pnSeed6_test));
 
-
         fRequireRPCPassword = true;
         fMiningRequiresPeers = true;
         fAllowMinDifficultyBlocks = true;
@@ -234,8 +268,6 @@ public:
         fRequireStandard = false;
         fMineBlocksOnDemand = false;
         fTestnetToBeDeprecatedFieldRPC = true;
-
-
 
         nPoolMaxTransactions = 2;
         strSporkKey = "04363509d5c65f5a9ca7ceedad4887007ae85469d249a6f566b788504ee5e105bcf1bbc515f49a7aac3bceb8864bb2ba84bebd92c66ff9022309e2bfbd5f70d11f";
@@ -274,11 +306,29 @@ public:
         bnProofOfWorkLimit = ~uint256(0) >> 1;
         genesis.nTime = 1527479819;
         genesis.nBits = 0x207fffff;
-        genesis.nNonce = 2;
+        genesis.nNonce = 22610002;
+        nDefaultPort = 57123;
+
+        uint256 hashTarget = CBigNum().SetCompact(genesis.nBits).getuint256();
+        /*while (genesis.GetHash() > hashTarget)
+        {
+            ++genesis.nNonce;
+            if (genesis.nNonce == 0)
+            {
+                printf("NONCE WRAPPED, incrementing time");
+                ++genesis.nTime;
+            }
+            if (genesis.nNonce % 10000 == 0)
+            {
+                printf("nonce %08u: hash = %s \n", genesis.nNonce, genesis.GetHash().ToString().c_str());
+            }
+        }*/
 
         hashGenesisBlock = genesis.GetHash();
-        nDefaultPort = 57123;
-        assert(hashGenesisBlock == uint256("0x07ddf9530236a672d4d86eed6fba2dcd9bd47253ca5084895bf78d7955a266ef"));
+        //printf("RT nNonce %u\n", genesis.nNonce);
+        //printf("RT %s\n", hashGenesisBlock.ToString().c_str());
+        //printf("%s\n", genesis.hashMerkleRoot.ToString().c_str());
+        assert(hashGenesisBlock == uint256("0x0ef9016cbfecd361f257d1a6691e94dd370aa7325d4ef246c1f6bee4cd8f16c2"));
 
         vFixedSeeds.clear(); //! Testnet mode doesn't have any fixed seeds.
         vSeeds.clear();      //! Testnet mode doesn't have any DNS seeds.
