@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=TAN
+Comment=TAN P2P Cryptocurrency
+Exec=taurusnetwork-qt %u
+Terminal=false
+Type=Application
+Icon=taurusnetwork128
+MimeType=x-scheme-handler/taurusnetwork;
+Categories=Office;Finance;
+Name[en_US]=taurusnetwork-qt.desktop

@@ -1,0 +1,11 @@
+[Protocol]
+exec=taurusnetwork-qt '%u'
+protocol=taurusnetwork
+input=none
+output=none
+helper=true
+listing=
+reading=false
+writing=false
+makedir=false
+deleting=false
